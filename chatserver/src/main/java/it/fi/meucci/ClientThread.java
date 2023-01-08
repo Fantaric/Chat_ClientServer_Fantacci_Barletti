@@ -63,7 +63,6 @@ public class ClientThread extends Thread {
                                 break;
                             }
                         }
-                        // brutto da cambiare!!!
                         if (m.indice != 100)
                             m.indice = 402;
                         else
@@ -109,13 +108,15 @@ public class ClientThread extends Thread {
     }
 
     public void UpdatedList(String nome, String azione) throws IOException {
+        // serve per il metodo ControlList.
         m.mittente = null;
+        m.listaC = ControlList();
+        m.indice = 202;
+        m.mittente = nome;
+        m.messaggio = azione;
+        
         for (String key : lista.keySet()) {
             DataOutputStream out1 = new DataOutputStream(lista.get(key).getOutputStream());
-            m.listaC = ControlList();
-            m.indice = 202;
-            m.mittente = nome;
-            m.messaggio = azione;
             out1.writeBytes(Serializzazione(m) + "\n");
         }
     }

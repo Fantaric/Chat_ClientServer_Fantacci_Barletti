@@ -44,7 +44,7 @@ public class ThreadComunica extends Thread {
         switch (m.indice) {
 
           case 1:
-            if (m1.listaC != null && m1.listaC.size() != 1) {
+            if (m1.listaC.size() != 1) {
               m.indice = 2;
               System.out.print("Inserisci Destinatario: ");
               String destinatario = tastiera.readLine();
@@ -133,8 +133,6 @@ public class ThreadComunica extends Thread {
       String nome = tastiera.readLine();
       m.indice = 1;
       m.mittente = nome;
-      m.messaggio = "";
-      // m.destinatario = "";
       m.listaC = new ArrayList<>();
       out.writeBytes(Serializzazione(m) + "\n");
     } catch (Exception e) {
