@@ -91,7 +91,7 @@ public class ClientThread extends Thread {
                     lista.remove(m.getMittente());
                     m.indice = 500;
                     out.writeBytes(Serializzazione(m) + "\n");
-                    UpdatedList(m.getMittente(),"disconnesso");
+                    UpdatedList(m.getMittente(), "disconnesso");
                     break;
                 // Risporta al messaggio privato
                 case 6:
@@ -115,7 +115,7 @@ public class ClientThread extends Thread {
             m.listaC = ControlList();
             m.indice = 202;
             m.mittente = nome;
-            m.messaggio=azione;
+            m.messaggio = azione;
             out1.writeBytes(Serializzazione(m) + "\n");
         }
     }

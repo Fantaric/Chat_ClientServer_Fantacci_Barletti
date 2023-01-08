@@ -11,35 +11,28 @@ public class ThreadComunica extends Thread {
   Socket sock;
   Messaggio m = new Messaggio();
   Messaggio m1;
+  ThreadRicevi tr = new ThreadRicevi();
 
   public ThreadComunica(Socket sock, Messaggio m1) {
     this.sock = sock;
     this.m1 = m1;
   }
 
+  public ThreadComunica() {
+  }
+
   public void comunica() throws IOException {
     try {
-
       DataOutputStream out = new DataOutputStream(sock.getOutputStream());
       BufferedReader tastiera = new BufferedReader(new InputStreamReader(System.in));
 
-      System.out.print("\nInserisci Nome Per Connetterti alla Chat: ");
-
-
-        String nome = tastiera.readLine();
-        m.indice = 1;
-        m.mittente = nome;
-        m.messaggio = "";
-        // m.destinatario = "";
-        m.listaC = new ArrayList<>();
-        out.writeBytes(Serializzazione(m) + "\n");
-    
+      connessione(out, tastiera);
 
       for (;;) {
         // per gestire la risposta della chat
-
         String scelta = tastiera.readLine().toUpperCase();
-        if (scelta.matches("[1-4]+")) {
+
+        if (scelta.matches("[0-4]+")) {
           m.indice = Integer.parseInt(scelta);
         } else if (scelta.equals("Y") || scelta.equals("N"))
           m.indice = 5;
@@ -51,7 +44,7 @@ public class ThreadComunica extends Thread {
         switch (m.indice) {
 
           case 1:
-            if (m1.listaC.size() != 1) {
+            if (m1.listaC != null && m1.listaC.size() != 1) {
               m.indice = 2;
               System.out.print("Inserisci Destinatario: ");
               String destinatario = tastiera.readLine();
@@ -97,8 +90,9 @@ public class ThreadComunica extends Thread {
           case 6:
             System.out.println("Lettera inserita errata!");
             break;
-          default:
-            System.out.println("Errore, Inserisci indice corretto!");
+          // per reinserire il nome
+          case 0:
+            connessione(out, tastiera);
             break;
 
         }
@@ -133,12 +127,28 @@ public class ThreadComunica extends Thread {
     return true;
   }
 
+  public void connessione(DataOutputStream out, BufferedReader tastiera) {
+    try {
+      System.out.print("\nInserisci Nome Per Connetterti alla Chat: ");
+      String nome = tastiera.readLine();
+      m.indice = 1;
+      m.mittente = nome;
+      m.messaggio = "";
+      // m.destinatario = "";
+      m.listaC = new ArrayList<>();
+      out.writeBytes(Serializzazione(m) + "\n");
+    } catch (Exception e) {
+      System.out.println(e.getMessage());
+    }
+
+  }
+
   @Override
   public void run() {
     try {
       comunica();
     } catch (Exception e) {
-      e.getMessage();
+      System.out.println(e.getMessage());
     }
   }
 }

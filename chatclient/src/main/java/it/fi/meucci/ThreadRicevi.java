@@ -5,7 +5,6 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.Socket;
 
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 public class ThreadRicevi extends Thread {
@@ -18,11 +17,13 @@ public class ThreadRicevi extends Thread {
         this.m1 = m1;
     }
 
+    public ThreadRicevi() {
+    }
+
     public void ricevi() throws IOException {
         BufferedReader in = new BufferedReader(new InputStreamReader(sock.getInputStream()));
 
         for (;;) {
-
             String outDalServer = in.readLine();
             m = DeSerializzazione(outDalServer);
 
@@ -50,14 +51,14 @@ public class ThreadRicevi extends Thread {
                 case 202:
                     m1.listaC = m.listaC;
                     System.out.println("\n----------------------------------------");
-                    if(m.messaggio.equals("connesso"))
+                    if (m.messaggio.equals("connesso"))
                         System.out.println(m.getMittente() + " si è connesso ");
                     else
                         System.out.println(m.getMittente() + " si è disconnesso ");
                     System.out.println("------------------------------------------");
                     break;
                 case 400:
-                    System.out.println("Nome già utilizzato all'interno della chat \nInserisci Nome Per Connetterti alla Chat: ");
+                    System.out.println("Nome già utilizzato all'interno della chat, Premi 0 per reinserirlo");
                     break;
                 case 401:
                     System.out.println("Nessun Utente connesso! Non puoi inviare alcun messaggio");
@@ -94,9 +95,6 @@ public class ThreadRicevi extends Thread {
                     System.out.println("Disconnesso dalla Chat");
                     sock.close();
                     break;
-
-                default:
-                    // code block
             }
         }
     }
